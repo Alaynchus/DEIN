@@ -27,7 +27,7 @@ public class Main extends Application {
 			Label edadlbl = new Label("Edad");
 			ComboBox<String> edadcombo = new ComboBox<>();
 			//ObservableList<String> valorescomb = {"Menores de 18", "Entre 18 y 30", "Entre 30 y 50", "Entre 51 y 70", "Mayores de 70"};
-			
+			System.out.println("hola");
 			GridPane root = new GridPane();
 			root.add(titulolbl, 0, 0, 4, 1);
 			root.add(proflbl, 0, 1, 1, 1);
