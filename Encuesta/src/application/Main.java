@@ -151,26 +151,21 @@ public class Main extends Application {
 		boolean error=false;
 		String textomostrar="";
 		
-		if(proftxt.getText().trim().isEmpty()) {
+		if(proftxt.getText().trim().isEmpty() || hermatxt.getText().trim().isEmpty() || !esNumerico(hermatxt.getText().trim()) || listadep.getSelectionModel().getSelectedItems().isEmpty()) {
 			error=true;
-			textomostrar="Hay que rellenar el campo de profesion \n";
-		}
-		if(hermatxt.getText().trim().isEmpty() || !esNumerico(hermatxt.getText().trim())){
-			error=true;
-			if(hermatxt.getText().trim().isEmpty()){
+			if(proftxt.getText().trim().isEmpty()) {
+				textomostrar="Hay que rellenar el campo de profesion \n";
+			}
+			if(hermatxt.getText().trim().isEmpty()) {
 				textomostrar = textomostrar + "Hay que rellenar el campo de número de hermanos \n" ;
 			}
-			else {
+			if(!esNumerico(hermatxt.getText().trim())) {
 				textomostrar = textomostrar + "Hay que rellenar el campo de número de hermanos con numeros \n";
 			}
+			if(listadep.getSelectionModel().getSelectedItems().isEmpty()){
+				textomostrar = textomostrar + "Tienes que indicar el deporte que practicas";
+			}
 		}
-		
-		if(listadep.getSelectionModel().getSelectedItems().isEmpty()) {
-			textomostrar = textomostrar + "Tienes que indicar el deporte que practicas";
-		}
-		
-		
-		
 		
 		if(error) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
