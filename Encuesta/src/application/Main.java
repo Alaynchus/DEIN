@@ -11,6 +11,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
+import javafx.geometry.HPos;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -24,6 +25,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -44,6 +46,7 @@ public class Main extends Application {
 	public void start(Stage stage) {
 		try {
 			Label titulolbl = new Label("ENCUESTA");
+			titulolbl.setId("titulo");
 			Label proflbl = new Label("Profesión:");
 			proftxt = new TextField();
 			Label hermalbl = new Label("Nº Hermanos:");
@@ -53,10 +56,12 @@ public class Main extends Application {
 			edadcombo = new ComboBox<>();
 			ObservableList<String> valorescomb = FXCollections.<String>observableArrayList("Menores de 18", "Entre 18 y 30", "Entre 30 y 50", "Entre 51 y 70", "Mayores de 70");
 			edadcombo.getItems().addAll(valorescomb);
+			edadcombo.getSelectionModel().select(0);
 			Label sexolbl= new Label("Sexo:");
 			RadioButton hombrerdnbtn= new RadioButton("Hombre");
 			RadioButton mujerdnbtn= new RadioButton("Mujer");
 			RadioButton otrordnbtn= new RadioButton("Otro");
+			mujerdnbtn.setSelected(true);
 			grupordn= new ToggleGroup();
 			grupordn.getToggles().addAll(hombrerdnbtn, mujerdnbtn, otrordnbtn);
 			
@@ -75,19 +80,24 @@ public class Main extends Application {
 			comsl.setShowTickLabels(true);
 			comsl.setShowTickMarks(true);
 			comsl.setMajorTickUnit(1);
+			Tooltip ttcom = new Tooltip("Indíca del 1 al 10 cúanto te gustría ir de compras"); 
+			comsl.setTooltip(ttcom);
 			
 			Label telelbl = new Label("Ver televisión:");
 			telesl = new Slider(0, 10, 5);
 			telesl.setShowTickLabels(true);
 			telesl.setShowTickMarks(true);
 			telesl.setMajorTickUnit(1);
+			Tooltip ttele = new Tooltip("Indíca del 1 al 10 cúanto te gustría ver la tele"); 
+			telesl.setTooltip(ttele);
 			
 			Label cinelbl = new Label("Ir al cine:");
 			cinesl = new Slider(0, 10, 5);
 			cinesl.setShowTickLabels(true);
 			cinesl.setShowTickMarks(true);
 			cinesl.setMajorTickUnit(1);
-			
+			Tooltip ttcine = new Tooltip("Indíca del 1 al 10 cúanto te gustría ir de compras"); 
+			cinesl.setTooltip(ttcine);
 			Button acepbtn = new Button("Aceptar");
 			acepbtn.setOnAction(e -> mostrarDatos());
 			Button cancbtn = new Button("Cancelar");   
@@ -95,8 +105,8 @@ public class Main extends Application {
 			
 			
 			GridPane root = new GridPane();
-			root.add(titulolbl, 0, 0, 4, 1);
-			
+			root.add(titulolbl, 0, 0, GridPane.REMAINING, 1);
+			root.setHalignment(titulolbl, HPos.CENTER);
 			root.add(proflbl, 0, 1, 1, 1);
 			root.add(proftxt, 1, 1, 3, 1);
 			
@@ -127,7 +137,10 @@ public class Main extends Application {
 			root.add(acepbtn, 0, 12, 2, 1);
 			root.add(cancbtn, 2, 12, 2, 1);
 			
+			
 			Scene scene = new Scene(root);
+			String url = getClass().getResource("/css/encuesta.css").toString();
+			scene.getStylesheets().add(url);
 			stage.setScene(scene);
 			stage.setTitle("ENCUESTA");
 			stage.show();
@@ -156,12 +169,16 @@ public class Main extends Application {
 			if(proftxt.getText().trim().isEmpty()) {
 				textomostrar="Hay que rellenar el campo de profesion \n";
 			}
+
 			if(hermatxt.getText().trim().isEmpty()) {
 				textomostrar = textomostrar + "Hay que rellenar el campo de número de hermanos \n" ;
 			}
-			if(!esNumerico(hermatxt.getText().trim())) {
-				textomostrar = textomostrar + "Hay que rellenar el campo de número de hermanos con numeros \n";
+			else {
+				if(!esNumerico(hermatxt.getText().trim())) {
+					textomostrar = textomostrar + "Hay que rellenar el campo de número de hermanos con numeros \n";
+				}
 			}
+			
 			if(listadep.getSelectionModel().getSelectedItems().isEmpty()){
 				textomostrar = textomostrar + "Tienes que indicar el deporte que practicas";
 			}
@@ -175,10 +192,23 @@ public class Main extends Application {
 			alert.showAndWait();
 		}
 		else{
+			RadioButton sel = (RadioButton) grupordn.getSelectedToggle();
+			textomostrar="Profesion: "+ proftxt.getText().trim()+"\n Nº de hermanos:" + hermatxt.getText().trim() + "\n Edad: "+ edadcombo.getValue()+
+			"\n Sexo: "+ sel.getText()+ "\n Deportes que practicas: \n";
+			
+			
+			ObservableList<String> depselec = listadep.getSelectionModel().getSelectedItems();
+			for (Iterator iterator = depselec.iterator(); iterator.hasNext();) {
+				String deporte = (String) iterator.next();
+				textomostrar = textomostrar + deporte +"\n";
+			}
+			
+			textomostrar = textomostrar + "Grado de afición a las compras: " + comsl.getValue() + "\n Grado de afición a ver la televisión: " + telesl.getValue() + "\n Grado de afición a ir al cine: " + cinesl.getValue();
+			
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			alert.setHeaderText(null);
 			alert.setTitle("Info");
-			alert.setContentText("Profesion: "+proftxt.getText().trim());
+			alert.setContentText(textomostrar);
 			alert.showAndWait();
 		}
 		
