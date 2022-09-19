@@ -27,11 +27,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 
 
-public class Main extends Application {
+public class Encuesta extends Application {
 	
 	private  CheckBox practicadeplbl;
 	private ListView<String> listadep;
@@ -103,16 +105,26 @@ public class Main extends Application {
 			Button cancbtn = new Button("Cancelar");   
 			cancbtn.setOnAction(e -> Platform.exit());
 			
+			ColumnConstraints cc1 = new ColumnConstraints();
+			ColumnConstraints cc2 = new ColumnConstraints();
+			ColumnConstraints cc3 = new ColumnConstraints();
+			ColumnConstraints cc4 = new ColumnConstraints();
+			
+			cc4.setHgrow(Priority.ALWAYS);
+			
 			
 			GridPane root = new GridPane();
 			root.add(titulolbl, 0, 0, GridPane.REMAINING, 1);
 			root.setHalignment(titulolbl, HPos.CENTER);
 			root.add(proflbl, 0, 1, 1, 1);
+			GridPane.setHalignment(proflbl, HPos.RIGHT);
 			root.add(proftxt, 1, 1, 3, 1);
 			
 			root.add(hermalbl, 0, 2, 1, 1);
+			GridPane.setHalignment(hermalbl, HPos.RIGHT);
 			root.add(hermatxt, 1, 2, 1, 1);
 			root.add(edadlbl, 2, 2, 1, 1);
+			GridPane.setHalignment(edadlbl, HPos.RIGHT);
 			root.add(edadcombo, 3, 2, 1, 1);
 			
 			HBox cajaradio= new HBox();
@@ -120,12 +132,15 @@ public class Main extends Application {
 			root.add(cajaradio, 0, 3, 3, 1);
 			
 			root.add(practicadeplbl, 0, 4, 1, 1);
+			GridPane.setHalignment(practicadeplbl, HPos.RIGHT);
 			root.add(cuallbl, 2, 4, 1, 1);
 			root.add(listadep, 2, 5, 2, 3);
 			
 			root.add(marcalbl , 0, 8, 4, 1);
+			root.setHalignment(marcalbl, HPos.CENTER);
 			
 			root.add(comlbl, 0, 9, 1, 1); 
+			root.setHalignment(comlbl, HPos.RIGHT);
 			root.add(comsl, 1, 9, 3, 1); 
 			
 			root.add(telelbl, 0, 10, 1, 1); 
@@ -137,6 +152,10 @@ public class Main extends Application {
 			root.add(acepbtn, 0, 12, 2, 1);
 			root.add(cancbtn, 2, 12, 2, 1);
 			
+			root.getColumnConstraints().add(cc1);
+			root.getColumnConstraints().add(cc2);
+			root.getColumnConstraints().add(cc3);
+			root.getColumnConstraints().add(cc4);
 			
 			Scene scene = new Scene(root);
 			String url = getClass().getResource("/css/encuesta.css").toString();
