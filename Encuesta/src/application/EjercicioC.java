@@ -18,18 +18,21 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import model.Persona;
 
-public class EjercicioB extends Application{
+public class EjercicioC extends Application{
 	
 	private TextField nombretxt;
 	private TextField apetxt;
 	private TextField edadtxt;
 	private Button agregarbtn;
+	private Button modificarbtn;
+	private Button eliminarbtn;
 	private TableView<Persona> tabla;
 	private ObservableList<Persona> listadepersonas;
 	
@@ -41,8 +44,19 @@ public class EjercicioB extends Application{
 			nombretxt = new TextField();
 			apetxt = new TextField();
 			edadtxt = new TextField();
+			
 			agregarbtn = new Button("Agregar Pesona");
 			agregarbtn.setOnAction(e -> agregarPersona());
+			
+			modificarbtn = new Button("Modificar");
+			modificarbtn.setOnAction(e-> modificarDatos());
+			
+			eliminarbtn = new Button("Eliminar");
+			
+			HBox downbox = new HBox(modificarbtn, eliminarbtn);
+			downbox.setSpacing(75);
+			downbox.setStyle("-fx-padding: 10px;");
+			
 			VBox leftbox = new VBox(nombrelbl, nombretxt, apelbl, apetxt, edadlbl, edadtxt, agregarbtn);
 			leftbox.setSpacing(10);
 			BorderPane.setAlignment(leftbox, Pos.CENTER_LEFT);
@@ -66,13 +80,17 @@ public class EjercicioB extends Application{
 			
 			tabla.getColumns().addAll(nombrecol, apecol, edadcol);
 			tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+			tabla.setOnMouseClicked(e-> cargarDatos());
 			
-			listadepersonas = tabla.getItems();;
+			
 			
 			GridPane root = new GridPane();
-			root.add(leftbox, 0, 0);
+			root.add(leftbox, 0, 0, 1,1);
 			root.add(tabla, 1, 0);
+			root.add(downbox, 1, 1, 1, 1);
+			
 			leftbox.setAlignment(Pos.CENTER_LEFT);
+			downbox.setAlignment(Pos.CENTER);
 			root.setStyle("-fx-padding: 10px");
 			Scene scene = new Scene(root);
 			String imagePath = getClass().getResource("/imagenes/agenda.png").toString();
@@ -88,26 +106,12 @@ public class EjercicioB extends Application{
 	}
 	
 	private void agregarPersona() {
-		if(nombretxt.getText().trim()=="" || apetxt.getText().trim()=="" || !esNumerico(edadtxt.getText().trim()) || edadtxt.getText().trim()=="") {
-			String textoerror="";
-			if(nombretxt.getText().trim()=="") {
-				textoerror = "Desbes introducir un nombre \n";
-			}
-			if(apetxt.getText().trim()=="") {
-				textoerror = textoerror + "Desbes introducir un apellido \n";
-			}
-			if(edadtxt.getText().trim()=="") {
-				textoerror = textoerror + "Desbes introducir una edad \n";
-			}
-			if(!esNumerico(edadtxt.getText().trim()) && edadtxt.getText().trim()!="") {
-				textoerror = textoerror + "La edad debe ser un número";
-			}
+		if(!validarDatos()) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setHeaderText(null);
 			alert.setTitle("Error");
-			alert.setContentText(textoerror);
+			alert.setContentText(dameError());
 			alert.showAndWait();
-	
 		}
 		else {
 			Persona per = new Persona(nombretxt.getText(), apetxt.getText(), Integer.valueOf(edadtxt.getText()));
@@ -133,6 +137,72 @@ public class EjercicioB extends Application{
 			
 		}
 		
+	}
+	
+	public void modificarDatos(){
+		
+		if(!validarDatos()) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setHeaderText(null);
+			alert.setTitle("Error");
+			alert.setContentText(dameError());
+			alert.showAndWait();
+		}
+		else {
+			Persona perselec = tabla.getSelectionModel().getSelectedItem();
+			Persona pernueva = new Persona(nombretxt.getText(), apetxt.getText(), Integer.valueOf(edadtxt.getText()));
+			
+			if (!listadepersonas.contains(pernueva)) {
+				System.out.println("aaaa");
+				perselec.setNombre(nombretxt.getText());
+				perselec.setApellidos(apetxt.getText());
+				perselec.setEdad(Integer.valueOf(edadtxt.getText()));
+			}
+			else {
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+				alert.setHeaderText(null);
+				alert.setTitle("Error");
+				alert.setContentText("Esta persona ya se encuentra en la lista");
+				alert.showAndWait();
+			}
+			tabla.refresh();
+		}
+		
+		
+
+	}
+	
+	public void cargarDatos() {
+		Persona perselec = tabla.getSelectionModel().getSelectedItem();
+		nombretxt.setText(perselec.getNombre());
+		apetxt.setText(perselec.getApellidos());
+		edadtxt.setText(String.valueOf(perselec.getEdad()));
+	}
+	
+	public boolean validarDatos() {
+		if(nombretxt.getText().trim()=="" || apetxt.getText().trim()=="" || !esNumerico(edadtxt.getText().trim()) || edadtxt.getText().trim()=="") {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+	
+	public String dameError() {
+		String textoerror="";
+		if(nombretxt.getText().trim()=="") {
+			textoerror = "Desbes introducir un nombre \n";
+		}
+		if(apetxt.getText().trim()=="") {
+			textoerror = textoerror + "Desbes introducir un apellido \n";
+		}
+		if(edadtxt.getText().trim()=="") {
+			textoerror = textoerror + "Desbes introducir una edad \n";
+		}
+		if(!esNumerico(edadtxt.getText().trim()) && edadtxt.getText().trim()!="") {
+			textoerror = textoerror + "La edad debe ser un número";
+		}
+		return textoerror;
 	}
 	
 	public boolean esNumerico(String valor) {

@@ -10,8 +10,8 @@ public class Persona {
 	
 	public Persona(String nombre, String apellidos, int edad) {
 		this.nombre = nombre;
-		this.edad = edad;
 		this.apellidos = apellidos;
+		this.edad = edad;
 	}
 
 	@Override
@@ -53,5 +53,10 @@ public class Persona {
 
 	public void setEdad(int edad) {
 		this.edad = edad;
+	}
+
+	@Override
+	public String toString() {
+		return "Persona [nombre=" + nombre + ", apellidos=" + apellidos + ", edad=" + edad + "]";
 	}
 }
