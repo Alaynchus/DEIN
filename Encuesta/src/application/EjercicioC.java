@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -45,6 +46,11 @@ public class EjercicioC extends Application{
 			apetxt = new TextField();
 			edadtxt = new TextField();
 			
+			ColumnConstraints cc1 = new ColumnConstraints();
+			ColumnConstraints cc2 = new ColumnConstraints();
+			
+			cc2.setHgrow(Priority.ALWAYS);
+			
 			agregarbtn = new Button("Agregar Pesona");
 			agregarbtn.setOnAction(e -> agregarPersona());
 			
@@ -77,6 +83,7 @@ public class EjercicioC extends Application{
 			
 			TableColumn<Persona, Integer> edadcol = new TableColumn<>("EDAD");
 			edadcol.setCellValueFactory(new PropertyValueFactory<>("edad"));
+			edadcol.setStyle("-fx-alignment: CENTER;");
 			
 			tabla.getColumns().addAll(nombrecol, apecol, edadcol);
 			tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -88,6 +95,8 @@ public class EjercicioC extends Application{
 			root.add(leftbox, 0, 0, 1,1);
 			root.add(tabla, 1, 0);
 			root.add(downbox, 1, 1, 1, 1);
+			root.getColumnConstraints().add(cc1);
+			root.getColumnConstraints().add(cc2);
 			
 			leftbox.setAlignment(Pos.CENTER_LEFT);
 			downbox.setAlignment(Pos.CENTER);
@@ -118,9 +127,6 @@ public class EjercicioC extends Application{
 			
 			if(!listadepersonas.contains(per)) {
 				listadepersonas.add(per);
-				nombretxt.setText("");
-				apetxt.setText("");
-				edadtxt.setText("");
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
 				alert.setHeaderText(null);
 				alert.setTitle("Información");
@@ -167,9 +173,6 @@ public class EjercicioC extends Application{
 			}
 			tabla.refresh();
 		}
-		
-		
-
 	}
 	
 	public void cargarDatos() {
