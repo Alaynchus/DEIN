@@ -2,10 +2,12 @@ package application;
 
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -22,11 +24,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import model.Persona;
 
-public class EjercicioC extends Application{
+public class EjercicioD extends Application{
 	
 	private TextField nombretxt;
 	private TextField apetxt;
@@ -39,9 +42,6 @@ public class EjercicioC extends Application{
 	
 	public void start(Stage stage) {
 		try {
-			Label nombrelbl = new Label("Nombre");
-			Label apelbl = new Label("Apellidos");
-			Label edadlbl = new Label("Edad");
 			nombretxt = new TextField();
 			apetxt = new TextField();
 			edadtxt = new TextField();
@@ -52,22 +52,22 @@ public class EjercicioC extends Application{
 			cc2.setHgrow(Priority.ALWAYS);
 			
 			agregarbtn = new Button("Agregar Pesona");
-			agregarbtn.setOnAction(e -> agregarPersona());
+			agregarbtn.setOnAction(e -> abrirModal(agregarbtn));
 			
-			modificarbtn = new Button("Modificar");
-			modificarbtn.setOnAction(e-> modificarDatos());
+			modificarbtn = new Button("Modificar Persona");
+			modificarbtn.setOnAction(e-> abrirModal(modificarbtn));
 			
-			eliminarbtn = new Button("Eliminar");
+			eliminarbtn = new Button("Eliminar Persona");
 			eliminarbtn.setOnAction(e-> eliminar());
 			
-			HBox downbox = new HBox(modificarbtn, eliminarbtn);
+			HBox downbox = new HBox(agregarbtn, modificarbtn, eliminarbtn);
 			downbox.setSpacing(75);
 			downbox.setStyle("-fx-padding: 10px;");
 			
-			VBox leftbox = new VBox(nombrelbl, nombretxt, apelbl, apetxt, edadlbl, edadtxt, agregarbtn);
-			leftbox.setSpacing(10);
-			BorderPane.setAlignment(leftbox, Pos.CENTER_LEFT);
-			leftbox.setStyle("-fx-padding: 10px;");
+			//VBox leftbox = new VBox(nombrelbl, nombretxt, apelbl, apetxt, edadlbl, edadtxt, agregarbtn);
+			//leftbox.setSpacing(10);
+			//BorderPane.setAlignment(leftbox, Pos.CENTER_LEFT);
+			//leftbox.setStyle("-fx-padding: 10px;");
 			
 			
 			listadepersonas=FXCollections.observableArrayList();
@@ -93,13 +93,12 @@ public class EjercicioC extends Application{
 			
 			
 			GridPane root = new GridPane();
-			root.add(leftbox, 0, 0, 1,1);
-			root.add(tabla, 1, 0);
-			root.add(downbox, 1, 1, 1, 1);
+			root.add(tabla, 0, 0);
+			root.add(downbox, 0, 1, 1, 1);
 			root.getColumnConstraints().add(cc1);
 			root.getColumnConstraints().add(cc2);
 			
-			leftbox.setAlignment(Pos.CENTER_LEFT);
+			//leftbox.setAlignment(Pos.CENTER_LEFT);
 			downbox.setAlignment(Pos.CENTER);
 			root.setStyle("-fx-padding: 10px");
 			Scene scene = new Scene(root);
@@ -115,7 +114,7 @@ public class EjercicioC extends Application{
 		
 	}
 	
-	private void agregarPersona() {
+	private void agregarPersona(Stage st) {
 		if(!validarDatos()) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setHeaderText(null);
@@ -136,6 +135,8 @@ public class EjercicioC extends Application{
 				apetxt.setText("");
 				nombretxt.setText("");
 				edadtxt.setText("");
+				
+			    st.close();
 			}
 			else {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -149,7 +150,9 @@ public class EjercicioC extends Application{
 		
 	}
 	
-	public void modificarDatos(){
+
+	
+	public void modificarDatos(Stage st){
 		
 		if(!validarDatos()) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -166,6 +169,7 @@ public class EjercicioC extends Application{
 				perselec.setNombre(nombretxt.getText());
 				perselec.setApellidos(apetxt.getText());
 				perselec.setEdad(Integer.valueOf(edadtxt.getText()));
+				st.close();
 			}
 			else {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -175,9 +179,6 @@ public class EjercicioC extends Application{
 				alert.showAndWait();
 			}
 			tabla.refresh();
-			apetxt.setText("");
-			nombretxt.setText("");
-			edadtxt.setText("");
 		}
 	}
 	
@@ -192,6 +193,61 @@ public class EjercicioC extends Application{
 		apetxt.setText("");
 		nombretxt.setText("");
 		edadtxt.setText("");
+	}
+	
+	public void abrirModal(Button btnPulsado) {
+		Label nombrelbl = new Label("Nombre");
+		Label apelbl = new Label("Apellidos");
+		Label edadlbl = new Label("Edad");
+		nombretxt = new TextField();
+		apetxt = new TextField();
+		edadtxt = new TextField();
+		
+		Button guardarbtn = new Button("Guardar");
+		
+		Button cancelarbtn = new Button("Cancelar");
+		
+		HBox downbox = new HBox(guardarbtn, cancelarbtn);
+		downbox.setSpacing(25);
+		downbox.setStyle("-fx-padding: 10px;");
+		
+
+		ColumnConstraints cc1 = new ColumnConstraints();
+		ColumnConstraints cc2 = new ColumnConstraints();
+		
+		cc2.setHgrow(Priority.ALWAYS);
+		
+        GridPane root = new GridPane();
+        root.setHgap(10);
+        root.setVgap(5);
+        root.addRow(0, nombrelbl, nombretxt);
+        root.addRow(1, apelbl, apetxt);
+        root.addRow(2, edadlbl, edadtxt);
+        root.add(downbox, 0, 3, 2, 1);
+        root.getColumnConstraints().add(cc1);
+		root.getColumnConstraints().add(cc2);
+        
+        root.setStyle("-fx-padding: 20;");
+        Scene newScene = new Scene(root);
+        Stage newStage = new Stage();
+        if (btnPulsado==agregarbtn) {
+            guardarbtn.setOnAction(e-> agregarPersona(newStage));
+		}
+        else {
+        	Persona perselec = tabla.getSelectionModel().getSelectedItem();
+    		nombretxt.setText(perselec.getNombre());
+    		apetxt.setText(perselec.getApellidos());
+    		edadtxt.setText(String.valueOf(perselec.getEdad()));
+    		guardarbtn.setOnAction(e-> modificarDatos(newStage));
+        }
+        
+        cancelarbtn.setOnAction(e -> newStage.close());
+        
+        newStage.setScene(newScene);
+        newStage.setTitle("Nueva Persona");
+        newStage.initModality(Modality.APPLICATION_MODAL);
+        newStage.show();
+
 	}
 	
 	public void cargarDatos() {
