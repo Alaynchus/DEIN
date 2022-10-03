@@ -35,8 +35,8 @@ public class EjercicioD extends Application{
 	private TextField apetxt;
 	private TextField edadtxt;
 	private Button agregarbtn;
-	private Button modificarbtn;
-	private Button eliminarbtn;
+	private Button guardarbtn;
+	private Button cancelarbtn;
 	private TableView<Persona> tabla;
 	private ObservableList<Persona> listadepersonas;
 	
@@ -52,15 +52,15 @@ public class EjercicioD extends Application{
 			cc2.setHgrow(Priority.ALWAYS);
 			
 			agregarbtn = new Button("Agregar Pesona");
-			agregarbtn.setOnAction(e -> abrirModal(agregarbtn));
+			agregarbtn.setOnAction(e -> abrirModal());
 			
-			modificarbtn = new Button("Modificar Persona");
-			modificarbtn.setOnAction(e-> abrirModal(modificarbtn));
+//			modificarbtn = new Button("Modificar");
+//			modificarbtn.setOnAction(e-> modificarDatos());
+//			
+//			eliminarbtn = new Button("Eliminar");
+//			eliminarbtn.setOnAction(e-> eliminar());
 			
-			eliminarbtn = new Button("Eliminar Persona");
-			eliminarbtn.setOnAction(e-> eliminar());
-			
-			HBox downbox = new HBox(agregarbtn, modificarbtn, eliminarbtn);
+			HBox downbox = new HBox(agregarbtn);
 			downbox.setSpacing(75);
 			downbox.setStyle("-fx-padding: 10px;");
 			
@@ -152,7 +152,7 @@ public class EjercicioD extends Application{
 	
 
 	
-	public void modificarDatos(Stage st){
+	public void modificarDatos(){
 		
 		if(!validarDatos()) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -169,7 +169,6 @@ public class EjercicioD extends Application{
 				perselec.setNombre(nombretxt.getText());
 				perselec.setApellidos(apetxt.getText());
 				perselec.setEdad(Integer.valueOf(edadtxt.getText()));
-				st.close();
 			}
 			else {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -179,6 +178,9 @@ public class EjercicioD extends Application{
 				alert.showAndWait();
 			}
 			tabla.refresh();
+			apetxt.setText("");
+			nombretxt.setText("");
+			edadtxt.setText("");
 		}
 	}
 	
@@ -195,24 +197,32 @@ public class EjercicioD extends Application{
 		edadtxt.setText("");
 	}
 	
-	public void abrirModal(Button btnPulsado) {
+	public void abrirModal() {
 		Label nombrelbl = new Label("Nombre");
+		nombrelbl.setAlignment(Pos.BASELINE_LEFT);
 		Label apelbl = new Label("Apellidos");
+		apelbl.setAlignment(Pos.BASELINE_LEFT);
 		Label edadlbl = new Label("Edad");
+		edadlbl.setAlignment(Pos.BASELINE_LEFT);
 		nombretxt = new TextField();
+	
 		apetxt = new TextField();
+	
 		edadtxt = new TextField();
+		edadtxt.setMaxWidth(65);
 		
-		Button guardarbtn = new Button("Guardar");
+		guardarbtn = new Button("Guardar");
 		
-		Button cancelarbtn = new Button("Cancelar");
+		cancelarbtn = new Button("Cancelar");
 		
 		HBox downbox = new HBox(guardarbtn, cancelarbtn);
 		downbox.setSpacing(25);
 		downbox.setStyle("-fx-padding: 10px;");
+		downbox.setAlignment(Pos.CENTER);
 		
 
 		ColumnConstraints cc1 = new ColumnConstraints();
+		
 		ColumnConstraints cc2 = new ColumnConstraints();
 		
 		cc2.setHgrow(Priority.ALWAYS);
@@ -230,22 +240,14 @@ public class EjercicioD extends Application{
         root.setStyle("-fx-padding: 20;");
         Scene newScene = new Scene(root);
         Stage newStage = new Stage();
-        if (btnPulsado==agregarbtn) {
-            guardarbtn.setOnAction(e-> agregarPersona(newStage));
-		}
-        else {
-        	Persona perselec = tabla.getSelectionModel().getSelectedItem();
-    		nombretxt.setText(perselec.getNombre());
-    		apetxt.setText(perselec.getApellidos());
-    		edadtxt.setText(String.valueOf(perselec.getEdad()));
-    		guardarbtn.setOnAction(e-> modificarDatos(newStage));
-        }
         
         cancelarbtn.setOnAction(e -> newStage.close());
+        guardarbtn.setOnAction(e-> agregarPersona(newStage));
         
         newStage.setScene(newScene);
         newStage.setTitle("Nueva Persona");
         newStage.initModality(Modality.APPLICATION_MODAL);
+        newStage.setResizable(false);
         newStage.show();
 
 	}
