@@ -1,29 +1,25 @@
 package application;
 
 
+
+
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -34,9 +30,12 @@ public class EjercicioF extends Application{
 	private TextField nombretxt;
 	private TextField apetxt;
 	private TextField edadtxt;
+	private TextField filtnomtxt;
 	private Button agregarbtn;
 	private Button modificarbtn;
 	private Button eliminarbtn;
+	private Button importarbtn;
+	private Button exportarbtn;
 	private TableView<Persona> tabla;
 	private ObservableList<Persona> listadepersonas;
 	
@@ -45,6 +44,20 @@ public class EjercicioF extends Application{
 			nombretxt = new TextField();
 			apetxt = new TextField();
 			edadtxt = new TextField();
+			
+			
+			Label filtrarNombrelbl = new Label("Filtrar por nombre:");
+			filtnomtxt = new TextField();
+			filtnomtxt.setOnKeyTyped(e-> filtrar());
+			
+			importarbtn= new Button("Importar");
+			importarbtn.setOnAction(e-> importar());
+			exportarbtn = new Button("Exportar");
+			exportarbtn.setOnAction(e-> exportar());
+			
+			HBox upperBox = new HBox(filtrarNombrelbl, filtnomtxt, importarbtn, exportarbtn);
+			upperBox.setSpacing(15);
+			upperBox.setStyle("-fx-padding: 10px;");
 			
 			ColumnConstraints cc1 = new ColumnConstraints();
 			ColumnConstraints cc2 = new ColumnConstraints();
@@ -93,8 +106,9 @@ public class EjercicioF extends Application{
 			
 			
 			GridPane root = new GridPane();
-			root.add(tabla, 0, 0);
-			root.add(downbox, 0, 1, 1, 1);
+			root.add(upperBox, 0, 0);
+			root.add(tabla, 0, 1);
+			root.add(downbox, 0, 2, 1, 1);
 			root.getColumnConstraints().add(cc1);
 			root.getColumnConstraints().add(cc2);
 			
@@ -254,6 +268,30 @@ public class EjercicioF extends Application{
         newStage.setResizable(false);
         newStage.show();
 
+	}
+	
+	public void filtrar() {
+		ObservableList<Persona> listafiltrada = FXCollections.observableArrayList();
+		if(filtnomtxt.getText().trim()=="" && tabla.getItems()!=listadepersonas) {
+			tabla.setItems(listadepersonas);
+		}
+		else {
+			for (int i = 0; i < listadepersonas.size(); i++) {
+				if(listadepersonas.get(i).getNombre().contains(filtnomtxt.getText())) {
+					listafiltrada.add(listadepersonas.get(i));
+				}
+			}
+			tabla.setItems(listafiltrada);
+		}
+		tabla.refresh();
+	}
+	
+	public void importar() {
+		
+	}
+	
+	public void exportar() {
+		
 	}
 	
 	public void cargarDatos() {
