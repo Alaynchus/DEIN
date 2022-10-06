@@ -3,6 +3,8 @@ package application;
 
 
 
+import java.io.File;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,6 +22,8 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -38,6 +42,8 @@ public class EjercicioF extends Application{
 	private Button exportarbtn;
 	private TableView<Persona> tabla;
 	private ObservableList<Persona> listadepersonas;
+	private FileChooser filecho;
+    
 	
 	public void start(Stage stage) {
 		try {
@@ -51,7 +57,7 @@ public class EjercicioF extends Application{
 			filtnomtxt.setOnKeyTyped(e-> filtrar());
 			
 			importarbtn= new Button("Importar");
-			importarbtn.setOnAction(e-> importar());
+			importarbtn.setOnAction(e-> importar(stage));
 			exportarbtn = new Button("Exportar");
 			exportarbtn.setOnAction(e-> exportar());
 			
@@ -286,7 +292,13 @@ public class EjercicioF extends Application{
 		tabla.refresh();
 	}
 	
-	public void importar() {
+	public void importar(Stage st) {
+		filecho = new FileChooser();
+		filecho.getExtensionFilters()
+        .add(new ExtensionFilter("CSV Files","*.csv"));
+
+
+		File archivo = filecho.showOpenDialog(st);
 		
 	}
 	
