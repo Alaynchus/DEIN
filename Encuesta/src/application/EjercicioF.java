@@ -3,7 +3,13 @@ package application;
 
 
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Iterator;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -59,7 +65,7 @@ public class EjercicioF extends Application{
 			importarbtn= new Button("Importar");
 			importarbtn.setOnAction(e-> importar(stage));
 			exportarbtn = new Button("Exportar");
-			exportarbtn.setOnAction(e-> exportar());
+			exportarbtn.setOnAction(e-> exportar(stage));
 			
 			HBox upperBox = new HBox(filtrarNombrelbl, filtnomtxt, importarbtn, exportarbtn);
 			upperBox.setSpacing(15);
@@ -296,14 +302,49 @@ public class EjercicioF extends Application{
 		filecho = new FileChooser();
 		filecho.getExtensionFilters()
         .add(new ExtensionFilter("CSV Files","*.csv"));
-
-
 		File archivo = filecho.showOpenDialog(st);
+		BufferedReader br = null;
+		try {
+		    br = new BufferedReader(new FileReader(archivo));
+		    String linea;
+		    while ((linea = br.readLine()) != null) {                
+		        String[] datos = linea.split(",");
+		        System.out.println(datos[0] + ", " + datos[1] + ", " + datos[2] + ", " + datos[3] + ", " + datos[4] + ", " + datos[5]);
+		    }
+		} catch (FileNotFoundException e) {
+		    e.printStackTrace();
+		} catch (IOException e) {
+		    e.printStackTrace();
+		} finally {
+		    if (br != null) {
+		        try {
+		            br.close();
+		        } catch (IOException e) {
+		            e.printStackTrace();
+		        }
+		    }
+		}
 		
 	}
 	
-	public void exportar() {
-		
+	public void exportar(Stage st) {
+		filecho = new FileChooser();
+        filecho.setInitialFileName("personas.csv");
+        File archivo = filecho.showSaveDialog(st);
+        try (PrintWriter writer = new PrintWriter(new File("personas.csv"))){
+        	StringBuilder sb = new StringBuilder();
+        	for (Iterator iterator = listadepersonas.iterator(); iterator.hasNext();) {
+    			Persona persona = (Persona) iterator.next();
+    			sb.append(persona.getNombre()+",");
+    			sb.append(persona.getApellidos()+",");
+    			sb.append(persona.getEdad());
+    			writer.write(sb.toString());
+        	}
+		} catch (FileNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
+        
+			
 	}
 	
 	public void cargarDatos() {
