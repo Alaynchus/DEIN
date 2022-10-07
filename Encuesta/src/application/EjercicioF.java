@@ -300,8 +300,7 @@ public class EjercicioF extends Application{
 	
 	public void importar(Stage st) {
 		filecho = new FileChooser();
-		filecho.getExtensionFilters()
-        .add(new ExtensionFilter("CSV Files","*.csv"));
+		filecho.getExtensionFilters().add(new ExtensionFilter("CSV Files","*.csv"));
 		File archivo = filecho.showOpenDialog(st);
 		BufferedReader br = null;
 		try {
@@ -309,8 +308,11 @@ public class EjercicioF extends Application{
 		    String linea;
 		    while ((linea = br.readLine()) != null) {                
 		        String[] datos = linea.split(",");
-		        System.out.println(datos[0] + ", " + datos[1] + ", " + datos[2] + ", " + datos[3] + ", " + datos[4] + ", " + datos[5]);
+		        System.out.println(datos[0] + ", " + datos[1] + ", " + datos[2]);
+		        Persona per = new Persona(datos[0], datos[1], Integer.parseInt(datos[2]));
+		        listadepersonas.add(per);
 		    }
+		    tabla.refresh();
 		} catch (FileNotFoundException e) {
 		    e.printStackTrace();
 		} catch (IOException e) {
@@ -332,13 +334,13 @@ public class EjercicioF extends Application{
         filecho.setInitialFileName("personas.csv");
         File archivo = filecho.showSaveDialog(st);
         try (PrintWriter writer = new PrintWriter(new File("personas.csv"))){
-        	StringBuilder sb = new StringBuilder();
         	for (Iterator iterator = listadepersonas.iterator(); iterator.hasNext();) {
     			Persona persona = (Persona) iterator.next();
+    			StringBuilder sb = new StringBuilder();
     			sb.append(persona.getNombre()+",");
     			sb.append(persona.getApellidos()+",");
     			sb.append(persona.getEdad());
-    			writer.write(sb.toString());
+    			writer.write(sb.toString()+"\n");
         	}
 		} catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());
