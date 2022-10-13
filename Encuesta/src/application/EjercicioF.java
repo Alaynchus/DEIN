@@ -15,6 +15,7 @@ import java.util.Iterator;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -29,6 +30,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
@@ -73,9 +75,9 @@ public class EjercicioF extends Application{
 			upperBox.setStyle("-fx-padding: 10px;");
 			
 			ColumnConstraints cc1 = new ColumnConstraints();
-			ColumnConstraints cc2 = new ColumnConstraints();
+			RowConstraints rc1 = new RowConstraints();
+			RowConstraints rc2 = new RowConstraints();
 			
-			cc2.setHgrow(Priority.ALWAYS);
 			
 			agregarbtn = new Button("Agregar Pesona");
 			agregarbtn.setOnAction(e -> abrirModal(agregarbtn));
@@ -110,7 +112,7 @@ public class EjercicioF extends Application{
 			
 			TableColumn<Persona, Integer> edadcol = new TableColumn<>("EDAD");
 			edadcol.setCellValueFactory(new PropertyValueFactory<>("edad"));
-			edadcol.setStyle("-fx-alignment: CENTER;");
+			edadcol.setStyle("-fx-alignment: CENTER-RIGHT;");
 			
 			tabla.getColumns().addAll(nombrecol, apecol, edadcol);
 			tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -122,10 +124,15 @@ public class EjercicioF extends Application{
 			root.add(upperBox, 0, 0);
 			root.add(tabla, 0, 1);
 			root.add(downbox, 0, 2, 1, 1);
+			cc1.setHgrow(Priority.ALWAYS);
+			rc2.setVgrow(Priority.ALWAYS);
 			root.getColumnConstraints().add(cc1);
-			root.getColumnConstraints().add(cc2);
+			root.getRowConstraints().add(rc1);
+			root.getRowConstraints().add(rc2);
+			
 			
 			//leftbox.setAlignment(Pos.CENTER_LEFT);
+			upperBox.setAlignment(Pos.CENTER);
 			downbox.setAlignment(Pos.CENTER);
 			root.setStyle("-fx-padding: 10px");
 			Scene scene = new Scene(root);
@@ -245,6 +252,7 @@ public class EjercicioF extends Application{
 		
 
 		ColumnConstraints cc1 = new ColumnConstraints();
+		cc1.setHalignment(HPos.RIGHT);
 		ColumnConstraints cc2 = new ColumnConstraints();
 		
 		cc2.setHgrow(Priority.ALWAYS);
