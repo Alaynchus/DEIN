@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Paths;
 import java.util.Iterator;
 
 import javafx.application.Application;
@@ -300,17 +301,24 @@ public class EjercicioF extends Application{
 	
 	public void importar(Stage st) {
 		filecho = new FileChooser();
+		String currentPath = Paths.get(".").toAbsolutePath().normalize().toString();
+		filecho.setInitialDirectory(new File(currentPath));
 		filecho.getExtensionFilters().add(new ExtensionFilter("CSV Files","*.csv"));
 		File archivo = filecho.showOpenDialog(st);
 		BufferedReader br = null;
 		try {
 		    br = new BufferedReader(new FileReader(archivo));
 		    String linea;
-		    while ((linea = br.readLine()) != null) {                
-		        String[] datos = linea.split(",");
-		        System.out.println(datos[0] + ", " + datos[1] + ", " + datos[2]);
-		        Persona per = new Persona(datos[0], datos[1], Integer.parseInt(datos[2]));
-		        listadepersonas.add(per);
+		    int cont = 1;
+		    linea = br.readLine();
+		    while (linea!= null) {
+		    	if(cont!=1) {
+		    		String[] datos = linea.split(",");
+		    		Persona per = new Persona(datos[0], datos[1], Integer.parseInt(datos[2]));
+		    		tabla.getItems().add(per);
+		    	}
+		    	cont++;
+		    	linea = br.readLine();
 		    }
 		    tabla.refresh();
 		} catch (FileNotFoundException e) {
@@ -333,15 +341,13 @@ public class EjercicioF extends Application{
 		filecho = new FileChooser();
         filecho.setInitialFileName("personas.csv");
         File archivo = filecho.showSaveDialog(st);
+        String sb="Nombre,Apellido,Edad \n";
         try (PrintWriter writer = new PrintWriter(new File("personas.csv"))){
         	for (Iterator iterator = listadepersonas.iterator(); iterator.hasNext();) {
     			Persona persona = (Persona) iterator.next();
-    			StringBuilder sb = new StringBuilder();
-    			sb.append(persona.getNombre()+",");
-    			sb.append(persona.getApellidos()+",");
-    			sb.append(persona.getEdad());
-    			writer.write(sb.toString()+"\n");
+    			sb+=(persona.getNombre()+","+persona.getApellidos()+","+persona.getEdad()+"\n");
         	}
+        	writer.write(sb);
 		} catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());
 		}
