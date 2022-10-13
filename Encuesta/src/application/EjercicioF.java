@@ -301,26 +301,17 @@ public class EjercicioF extends Application{
 	
 	public void importar(Stage st) {
 		filecho = new FileChooser();
-		String currentPath = Paths.get(".").toAbsolutePath().normalize().toString();
-		filecho.setInitialDirectory(new File(currentPath));
-		filecho.getExtensionFilters().add(new ExtensionFilter("CSV Files","*.csv"));
+		filecho.getExtensionFilters()
+        .add(new ExtensionFilter("CSV Files","*.csv"));
 		File archivo = filecho.showOpenDialog(st);
 		BufferedReader br = null;
 		try {
 		    br = new BufferedReader(new FileReader(archivo));
 		    String linea;
-		    int cont = 1;
-		    linea = br.readLine();
-		    while (linea!= null) {
-		    	if(cont!=1) {
-		    		String[] datos = linea.split(",");
-		    		Persona per = new Persona(datos[0], datos[1], Integer.parseInt(datos[2]));
-		    		tabla.getItems().add(per);
-		    	}
-		    	cont++;
-		    	linea = br.readLine();
+		    while ((linea = br.readLine()) != null) {                
+		        String[] datos = linea.split(",");
+		        System.out.println(datos[0] + ", " + datos[1] + ", " + datos[2] + ", " + datos[3] + ", " + datos[4] + ", " + datos[5]);
 		    }
-		    tabla.refresh();
 		} catch (FileNotFoundException e) {
 		    e.printStackTrace();
 		} catch (IOException e) {
