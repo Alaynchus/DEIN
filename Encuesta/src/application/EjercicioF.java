@@ -309,17 +309,23 @@ public class EjercicioF extends Application{
 	
 	public void importar(Stage st) {
 		filecho = new FileChooser();
-		filecho.getExtensionFilters()
-        .add(new ExtensionFilter("CSV Files","*.csv"));
+		filecho.getExtensionFilters().add(new ExtensionFilter("CSV Files","*.csv"));
 		File archivo = filecho.showOpenDialog(st);
 		BufferedReader br = null;
 		try {
 		    br = new BufferedReader(new FileReader(archivo));
-		    String linea;
-		    while ((linea = br.readLine()) != null) {                
-		        String[] datos = linea.split(",");
-		        System.out.println(datos[0] + ", " + datos[1] + ", " + datos[2] + ", " + datos[3] + ", " + datos[4] + ", " + datos[5]);
-		    }
+		    String linea=br.readLine();
+		    Boolean rowOne = true;
+		    while (linea  != null) {                
+		        if(rowOne == false) {
+					String[] partes=linea.split(",");
+					Persona p=new Persona(partes[0],partes[1],Integer.valueOf(partes[2]));
+					tabla.getItems().add(p);
+				}
+				rowOne=false;
+				linea=br.readLine();
+			}
+			tabla.refresh();
 		} catch (FileNotFoundException e) {
 		    e.printStackTrace();
 		} catch (IOException e) {
