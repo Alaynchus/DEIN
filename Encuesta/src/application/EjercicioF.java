@@ -217,16 +217,27 @@ public class EjercicioF extends Application{
 	}
 	
 	public void eliminar() {
-		Persona perselec = tabla.getSelectionModel().getSelectedItem();
-		listadepersonas.remove(perselec);
-		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-		alert.setHeaderText(null);
-		alert.setTitle("Información");
-		alert.setContentText("Ha sido borrada con éxito");
-		alert.showAndWait();
-		apetxt.setText("");
-		nombretxt.setText("");
-		edadtxt.setText("");
+		if(tabla.getSelectionModel().getSelectedItem()==null) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setHeaderText(null);
+			alert.setTitle("Error");
+			alert.setContentText("No has selecciondo ninguna persona");
+			alert.showAndWait();
+		}
+		else {
+			Persona perselec = tabla.getSelectionModel().getSelectedItem();
+			listadepersonas.remove(perselec);
+			tabla.getSelectionModel().clearSelection();
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			alert.setHeaderText(null);
+			alert.setTitle("Información");
+			alert.setContentText("Ha sido borrada con éxito");
+			alert.showAndWait();
+			apetxt.setText("");
+			nombretxt.setText("");
+			edadtxt.setText("");
+		}
+		
 	}
 	
 	public void abrirModal(Button btnPulsado) {
