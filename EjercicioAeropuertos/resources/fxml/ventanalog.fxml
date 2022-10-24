@@ -24,12 +24,12 @@
       <Button mnemonicParsing="false" prefHeight="24.0" prefWidth="151.0" text="Login" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
       <TextField maxWidth="-Infinity" prefHeight="24.0" prefWidth="172.0" GridPane.columnIndex="1">
          <GridPane.margin>
-            <Insets right="10.0" />
+            <Insets left="10.0" right="10.0" />
          </GridPane.margin>
       </TextField>
       <TextField maxWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <GridPane.margin>
-            <Insets right="10.0" />
+            <Insets left="10.0" right="10.0" />
          </GridPane.margin>
       </TextField>
    </children>
