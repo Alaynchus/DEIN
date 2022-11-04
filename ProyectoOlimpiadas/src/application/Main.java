@@ -14,6 +14,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			VBox root = (VBox)FXMLLoader.load(getClass().getResource("/fxml/olimpiadas.fxml"));
+			//GridPane root = (GridPane)FXMLLoader.load(getClass().getResource("/fxml/crearDeportistas.fxml"));
 			Scene scene = new Scene(root);
 			//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
