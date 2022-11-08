@@ -49,7 +49,7 @@ public class OlimpiadaController {
 	private ObservableList<Olimpiada> listaOlimpiada;
 	
 	@FXML
-	public void crearOlimpiada(ActionEvent event) {
+	public void abrirCrearOlimpiada(ActionEvent event) {
 		try {
 			 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/crearOlimpiada.fxml"));
 	         Parent root = loader.load();
@@ -61,13 +61,33 @@ public class OlimpiadaController {
 	         newStage.initOwner(this.btnCrear.getScene().getWindow());
 	         newStage.setScene(newScene);
 	         newStage.showAndWait();
+	         
 		}
 		catch (Exception e) {
 			System.out.println(e);
 		}
 	}
 	
-
+	 @FXML
+	 void abrirModificarOlim(ActionEvent event) {
+		 try {
+			 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/crearOlimpiada.fxml"));
+	         Parent root = loader.load();
+	         Scene newScene = new Scene(root);
+	         Stage newStage = new Stage();
+	         NuevaOlimpiadaController control= loader.getController();
+	         //control.cargarLista(listaOlimpiada);
+	         control.setOlimpiadalbl("Modificar Olimpiada");
+	         newStage.initModality(Modality.APPLICATION_MODAL);
+	         newStage.initOwner(this.btnCrear.getScene().getWindow());
+	         newStage.setScene(newScene);
+	         newStage.showAndWait();
+	        
+		 }
+		 catch (Exception e) {
+			System.out.println(e);
+		}
+	 }
 	
 	
 	

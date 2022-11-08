@@ -102,8 +102,8 @@
             </FlowPane>
             <FlowPane alignment="CENTER" hgap="50.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="3">
                <children>
-                  <Button fx:id="btnCrear" graphicTextGap="0.0" mnemonicParsing="false" onAction="#crearOlimpiada" prefHeight="24.0" prefWidth="100.0" text="Crear" />
-                  <Button fx:id="btnModificar" graphicTextGap="0.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="100.0" text="Modificar" />
+                  <Button fx:id="btnCrear" graphicTextGap="0.0" mnemonicParsing="false" onAction="#abrirCrearOlimpiada" prefHeight="24.0" prefWidth="100.0" text="Crear" />
+                  <Button fx:id="btnModificar" graphicTextGap="0.0" mnemonicParsing="false" onAction="#abrirModificarOlim" prefHeight="24.0" prefWidth="100.0" text="Modificar" />
                   <Button fx:id="btnEliminar" graphicTextGap="0.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="100.0" text="Eliminar" />
                </children>
             </FlowPane>
